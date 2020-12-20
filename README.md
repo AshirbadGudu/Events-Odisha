@@ -25,3 +25,7 @@
 
 - `.env` file must be created in root of your application
 - If you change anything inside the `.env` file then don't forget to restart the server
+
+## Website URL
+
+- https://events-odisha.web.app/
