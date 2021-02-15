@@ -6,12 +6,18 @@ import {
   Typography,
 } from "@material-ui/core";
 import { AccountCircle, ExitToApp } from "@material-ui/icons";
-import { Link as RouterLink } from "react-router-dom";
-import { useAuth } from "../config/AuthContext";
+import { Link as RouterLink, useHistory } from "react-router-dom";
+import { useAuth } from "../hooks";
 const Navbar = () => {
   const { currentUser, logout } = useAuth();
+  const history = useHistory();
   const handelLogout = async () => {
-    await logout();
+    try {
+      await logout();
+      history.push("/Login");
+    } catch (error) {
+      alert("Error", error.message);
+    }
   };
   return (
     <AppBar position="sticky">

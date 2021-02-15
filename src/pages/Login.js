@@ -1,14 +1,10 @@
 import React from "react";
-import Navbar from "../components/Navbar";
-import SignInScreen from "../components/SignInScreen";
-
-const Login = () => {
-  return (
-    <>
-      <Navbar />
-      <SignInScreen />
-    </>
-  );
-};
+import { SignInScreen } from "../components";
+import Layout from "../Layout";
+const Login = () => (
+  <Layout>
+    <SignInScreen />
+  </Layout>
+);
 
 export default Login;
