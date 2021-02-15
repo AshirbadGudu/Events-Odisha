@@ -29,3 +29,9 @@
 ## Website URL
 
 - https://events-odisha.web.app/
+
+## Un track Git Files
+
+- `git rm -r --cached .`
+- `git add .`
+- `git commit -m ".gitignore fix"`
