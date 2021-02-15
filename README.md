@@ -25,3 +25,13 @@
 
 - `.env` file must be created in root of your application
 - If you change anything inside the `.env` file then don't forget to restart the server
+
+## Website URL
+
+- https://events-odisha.web.app/
+
+## Un track Git Files
+
+- `git rm -r --cached .`
+- `git add .`
+- `git commit -m ".gitignore fix"`
