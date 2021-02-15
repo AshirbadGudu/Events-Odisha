@@ -1,5 +1,5 @@
 import "./style.css";
-import { AuthProvider } from "./config/AuthContext";
+import { AuthProvider } from "./config";
 import Router from "./Router";
 
 const App = () => (

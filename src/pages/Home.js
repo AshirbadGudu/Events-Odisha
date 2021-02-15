@@ -1,26 +1,13 @@
-import { useState, useEffect } from "react";
-import Navbar from "../components/Navbar";
 import { Container, Grid, Typography } from "@material-ui/core";
-import VotingCard from "../components/VotingCard";
-import { database } from "../config/firebaseConfig";
+import { VotingCard } from "../components";
+import { useHeroines } from "../hooks";
+import Layout from "../Layout";
 
 const Home = () => {
-  const [heroines, setHeroines] = useState([]);
-  useEffect(() => {
-    database.ref(`Heroines/`).on("value", (snap) => {
-      if (snap.exists()) {
-        const obj = snap.val();
-        const arr = [];
-        for (const key in obj) {
-          arr.push({ key, ...obj[key] });
-        }
-        setHeroines(arr);
-      }
-    });
-  }, []);
+  const { heroines } = useHeroines();
+
   return (
-    <>
-      <Navbar />
+    <Layout>
       <Container style={{ paddingTop: "5vh" }}>
         <Typography variant="h6">Vote For Best Odia Heroines</Typography>
         <Grid
@@ -30,7 +17,7 @@ const Home = () => {
           justify="center"
           alignItems="center"
         >
-          {heroines.map((heroine, key) => (
+          {heroines?.map((heroine, key) => (
             <Grid item sm={4} key={key}>
               <VotingCard
                 id={heroine.key}
@@ -43,7 +30,7 @@ const Home = () => {
           ))}
         </Grid>
       </Container>
-    </>
+    </Layout>
   );
 };
 
