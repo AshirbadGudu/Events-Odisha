@@ -1,11 +1,10 @@
 import { Container, Grid, Typography } from "@material-ui/core";
-import { VotingCard } from "../components";
+import { VotingCard, VotingCardSkeleton } from "../components";
 import { useHeroines } from "../hooks";
 import Layout from "../Layout";
 
 const Home = () => {
-  const { heroines } = useHeroines();
-
+  const { heroines, isLoaded } = useHeroines();
   return (
     <Layout>
       <Container style={{ paddingTop: "5vh" }}>
@@ -17,17 +16,21 @@ const Home = () => {
           justify="center"
           alignItems="center"
         >
-          {heroines?.map((heroine, key) => (
-            <Grid item sm={4} key={key}>
-              <VotingCard
-                id={heroine.key}
-                img={heroine.img}
-                title={heroine.name}
-                votes={heroine.votes}
-                category={"Heroines"}
-              />
-            </Grid>
-          ))}
+          {isLoaded ? (
+            heroines?.map((heroine, key) => (
+              <Grid item sm={4} key={key}>
+                <VotingCard
+                  id={heroine.key}
+                  img={heroine.img}
+                  title={heroine.name}
+                  votes={heroine.votes}
+                  category={"Heroines"}
+                />
+              </Grid>
+            ))
+          ) : (
+            <VotingCardSkeleton />
+          )}
         </Grid>
       </Container>
     </Layout>
