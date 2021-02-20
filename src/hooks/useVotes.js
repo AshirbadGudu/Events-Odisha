@@ -4,7 +4,9 @@ import { database } from "../config";
 
 const useVotes = (category) => {
   const [userVotes, setUserVotes] = useState({});
+  const [msg, setMsg] = useState({ text: "", show: false, type: "error" });
   const { currentUser } = useAuth();
+
   const handelVote = (votes, id) => {
     if (currentUser) {
       if (userVotes.id) {
@@ -23,7 +25,11 @@ const useVotes = (category) => {
         updateVote(votes, category, id);
       }
     } else {
-      alert("Please login in to participate in vote");
+      setMsg({
+        text: "Please login in to participate in vote",
+        show: true,
+        type: "error",
+      });
     }
   };
 
@@ -35,6 +41,7 @@ const useVotes = (category) => {
       .ref(`Votes/${currentUser.uid}/${category}/`)
       .set({ id, timestamp });
   };
+
   useEffect(() => {
     currentUser &&
       database
@@ -43,10 +50,13 @@ const useVotes = (category) => {
           snap.exists() ? setUserVotes(snap.val()) : setUserVotes({});
         });
   }, [category, currentUser]);
+
   return {
     userVotes,
     updateVote,
     handelVote,
+    setMsg,
+    msg,
   };
 };
 export default useVotes;
