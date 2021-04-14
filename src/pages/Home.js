@@ -23,7 +23,7 @@ const Home = () => {
                   id={heroine.key}
                   img={heroine.img}
                   title={heroine.name}
-                  votes={heroine.votes}
+                  votes={heroine?.votes || {}}
                   category={"Heroines"}
                 />
               </Grid>

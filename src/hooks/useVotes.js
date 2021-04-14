@@ -1,47 +1,40 @@
 import { useEffect, useState } from "react";
-import { useAuth } from ".";
+import { useAuth, useHeroines } from ".";
 import { database } from "../config";
 
 const useVotes = (category) => {
   const [userVotes, setUserVotes] = useState({});
   const [msg, setMsg] = useState({ text: "", show: false, type: "error" });
   const { currentUser } = useAuth();
+  const { heroines, isLoaded } = useHeroines();
 
-  const handelVote = (votes, id) => {
-    if (currentUser) {
-      if (userVotes.id) {
-        const previous = {};
-        database
-          .ref(`${category}/${userVotes.id}/votes/`)
-          .once("value", (snap) => {
-            previous.number_of_votes = parseInt(snap.val());
-          });
-        const reducedVotes = previous.number_of_votes - 1;
-        updateVote(votes, category, id);
-        database.ref(`${category}/${userVotes.id}/votes/`).set(reducedVotes);
-        userVotes.id === id &&
-          database.ref(`Votes/${currentUser.uid}/${category}/`).remove();
-      } else {
-        updateVote(votes, category, id);
-      }
-    } else {
-      setMsg({
+  // Handle Vote
+  const handelVote = async (votes, id) => {
+    // Check User logged in or not if not logged in then show alert
+    if (!currentUser?.uid)
+      return setMsg({
         text: "Please login in to participate in vote",
         show: true,
         type: "error",
       });
+    // If User logged in
+    if (currentUser?.uid && isLoaded) {
+      heroines.map((heroine) =>
+        database
+          .ref(`${category}/${heroine.key}/votes/${currentUser?.uid}`)
+          .remove()
+      );
+      const votingRef = `${category}/${id}/votes/${currentUser?.uid}`;
+      await database.ref(votingRef).set(new Date().toString());
     }
   };
 
-  const updateVote = async (votes, category, id) => {
-    const updatedVotes = parseInt(votes) + 1;
-    const timestamp = new Date().toLocaleString();
-    await database.ref(`${category}/${id}/votes/`).set(updatedVotes);
-    await database
-      .ref(`Votes/${currentUser.uid}/${category}/`)
-      .set({ id, timestamp });
+  // Remove Vote
+  const removeVote = async (id) => {
+    await database.ref(`${category}/${id}/votes/${currentUser?.uid}`).remove();
   };
 
+  // Fetch Votes
   useEffect(() => {
     currentUser &&
       database
@@ -53,7 +46,7 @@ const useVotes = (category) => {
 
   return {
     userVotes,
-    updateVote,
+    removeVote,
     handelVote,
     setMsg,
     msg,

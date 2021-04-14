@@ -8,10 +8,12 @@ import {
 } from "@material-ui/core";
 import { Favorite } from "@material-ui/icons";
 import { Alert } from "@material-ui/lab";
-import { useVotes } from "../hooks";
+import { useAuth, useVotes } from "../hooks";
 
 const VotingCard = ({ img, title, votes, id, category }) => {
-  const { userVotes, handelVote, msg, setMsg } = useVotes(category);
+  const { handelVote, msg, setMsg, removeVote } = useVotes(category);
+  const { currentUser } = useAuth();
+
   return (
     <Card>
       <Snackbar
@@ -35,14 +37,16 @@ const VotingCard = ({ img, title, votes, id, category }) => {
         avatar={<Avatar>{title.charAt(0)}</Avatar>}
         action={
           <IconButton
-            onClick={() => handelVote(votes, id)}
-            color={userVotes?.id === id ? "secondary" : "inherit"}
+            onClick={() =>
+              currentUser?.uid in votes ? removeVote(id) : handelVote(votes, id)
+            }
+            color={currentUser?.uid in votes ? "secondary" : "inherit"}
           >
             <Favorite />
           </IconButton>
         }
         title={title}
-        subheader={`${votes} Votes`}
+        subheader={`${Object.keys(votes).length} Votes`}
       />
     </Card>
   );

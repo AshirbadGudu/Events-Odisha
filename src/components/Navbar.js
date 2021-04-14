@@ -35,7 +35,7 @@ const Navbar = () => {
           <Button component={RouterLink} to="/" color="inherit">
             Home
           </Button>
-          {currentUser ? (
+          {currentUser?.uid ? (
             <Button
               onClick={handelLogout}
               color="inherit"
